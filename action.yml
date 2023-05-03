@@ -2,9 +2,27 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  github-token: # change this
+  text:
+    required: false
+    description: 'tweet description'
+    default: 'Hello World'
+  text:
+    required: false
+    description: 'tweet description'
+    default: '🌟 Thank you for starring our repository! We appreciate your support and will continue to deliver great content! 😃 #GitHub #Star'
+  consumer_key:
     required: true
-    description: 'github token for GraphQL'
+    description: 'twitter consumer key'
+  consumer_secret:
+    required: true
+    description: 'twitter consumer secret'
+  access_token:
+    required: true
+    description: 'twitter access token'
+  access_token_secret:
+    required: true
+    description: 'twitter access token secret'
+
 runs:
   using: 'node16'
   main: 'dist/index.js'
