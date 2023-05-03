@@ -66,8 +66,8 @@ function run() {
                 cache: new core_1.InMemoryCache(),
                 uri: 'https://api.github.com/graphql',
                 headers: {
-                    authorization: `Bearer ${token}`
-                    // authorization: `Bearer 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`
+                    // authorization: `Bearer ${token}`
+                    authorization: `Bearer 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`
                 }
             });
             core.debug('2');
