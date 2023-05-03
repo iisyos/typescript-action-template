@@ -1,6 +1,9 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import fetch from 'node-fetch'
+import {components} from '@octokit/openapi-types'
+
+type GitHubUser = components['schemas']['public-user']
 
 async function run(): Promise<void> {
   try {
@@ -10,25 +13,26 @@ async function run(): Promise<void> {
     core.debug('1')
     const token = core.getInput('github-token')
     core.debug(token)
-    const response = (await getUserProfile(username)) as string
-
-    core.debug(response)
+    const response = await getUserProfile(username)
+    if (response.twitter_username === null) {
+      core.info('twitter_username is null')
+      return
+    }
+    core.info(`twitter_username is ${response.twitter_username}`)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }
 }
 
-async function getUserProfile(username: string): Promise<unknown> {
+async function getUserProfile(username: string): Promise<GitHubUser> {
   const url = `https://api.github.com/users/${username}`
   const response = await fetch(url)
-  const data = await response.json()
 
   if (response.ok) {
+    const data = (await response.json()) as GitHubUser
     return data
   } else {
-    throw new Error(
-      `Error fetching profile: ${JSON.stringify(data, undefined, 2)}`
-    )
+    throw new Error(`Error fetching profile: ${await response.json()}`)
   }
 }
 

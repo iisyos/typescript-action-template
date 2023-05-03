@@ -54,8 +54,12 @@ function run() {
             core.debug('1');
             const token = core.getInput('github-token');
             core.debug(token);
-            const response = (yield getUserProfile(username));
-            core.debug(response);
+            const response = yield getUserProfile(username);
+            if (response.twitter_username === null) {
+                core.info('twitter_username is null');
+                return;
+            }
+            core.info(`twitter_username is ${response.twitter_username}`);
         }
         catch (error) {
             if (error instanceof Error)
@@ -67,12 +71,12 @@ function getUserProfile(username) {
     return __awaiter(this, void 0, void 0, function* () {
         const url = `https://api.github.com/users/${username}`;
         const response = yield (0, node_fetch_1.default)(url);
-        const data = yield response.json();
         if (response.ok) {
+            const data = (yield response.json());
             return data;
         }
         else {
-            throw new Error(`Error fetching profile: ${JSON.stringify(data, undefined, 2)}`);
+            throw new Error(`Error fetching profile: ${yield response.json()}`);
         }
     });
 }
