@@ -55,12 +55,11 @@ const GET_USER_PROFILE = (0, core_1.gql) `
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const payload = JSON.stringify(github.context.payload, undefined, 2);
-            core.debug(`The event payload: ${payload}`);
             if (github.context.payload.sender === undefined)
                 throw new Error('sender is undefined');
-            const senderId = github.context.payload.sender.login;
+            const username = github.context.payload.sender.login;
             // const senderId = "iisyos"
+            core.debug("1");
             const client = new core_1.ApolloClient({
                 cache: new core_1.InMemoryCache(),
                 uri: 'https://api.github.com/graphql',
@@ -69,10 +68,12 @@ function run() {
                     // authorization: `Bearer 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`
                 }
             });
+            core.debug("2");
             const { data } = yield client.query({
                 query: GET_USER_PROFILE,
-                variables: { username: senderId }
+                variables: { username }
             });
+            core.debug("3");
             if (data === undefined || data.user === undefined)
                 throw new Error('user is undefined');
             core.debug(`The user profile: ${JSON.stringify(data, undefined, 2)}`);
