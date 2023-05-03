@@ -20,11 +20,14 @@ async function run(): Promise<void> {
     const username = github.context.payload.sender.login
     // const senderId = "iisyos"
     core.debug('1')
+    const token = core.getInput('github-token')
+    core.debug(token)
+
     const client = new ApolloClient({
       cache: new InMemoryCache(),
       uri: 'https://api.github.com/graphql',
       headers: {
-        authorization: `Bearer ${core.getInput('GRAPHQL_TOKEN')}`
+        authorization: `Bearer ${token}`
         // authorization: `Bearer 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`
       }
     })
