@@ -5,10 +5,6 @@ inputs:
   text:
     required: false
     description: 'tweet description'
-    default: 'Hello World'
-  text:
-    required: false
-    description: 'tweet description'
     default: '🌟 Thank you for starring our repository! We appreciate your support and will continue to deliver great content! 😃 #GitHub #Star'
   consumer_key:
     required: true
