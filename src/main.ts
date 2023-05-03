@@ -1,6 +1,7 @@
 import * as core from '@actions/core'
 import * as github from '@actions/github'
 import {ApolloClient, gql, InMemoryCache} from '@apollo/client/core'
+import 'cross-fetch/polyfill'
 
 const GET_USER_PROFILE = gql`
   query GetUserProfile($username: String!) {
