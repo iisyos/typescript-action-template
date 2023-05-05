@@ -1,13 +1,30 @@
 import * as core from '@actions/core'
-import * as github from '@actions/github'
+import {SSM} from 'aws-sdk'
+import {SSMParameterGetter} from './services/ssm-parameter-getter'
+import {HerokuParameterSetter} from './services/heroku-parameter-setter'
+import {ActionRunner} from './services/action-runner'
+const ssm = new SSM({region: 'ap-northeast-3'})
 
 async function run(): Promise<void> {
-  try {
-    const payload = JSON.stringify(github.context.payload, undefined, 2)
-    core.info(`The event payload: ${payload}`)
-  } catch (error) {
-    if (error instanceof Error) core.setFailed(error.message)
-  }
+  const parameterGetter = new SSMParameterGetter(ssm)
+  const result = await parameterGetter.getParameters({
+    path: core.getInput('path'),
+    parameters: [],
+    nextToken: undefined
+  })
+  const herokuParameterSetter = new HerokuParameterSetter(
+    {
+      email: core.getInput('email'),
+      token: core.getInput('token'),
+      app: core.getInput('app')
+    },
+    result
+  )
+  herokuParameterSetter.setParameters()
 }
 
-run()
+const runner = new ActionRunner({
+  name: 'SSM ParameterStore to Heroku shipping',
+  cb: run
+})
+runner.run()
