@@ -25,6 +25,7 @@ export class SSMParameterGetter
     if (result.Parameters) {
       for (const parameter of result.Parameters) {
         if (parameter.Value && parameter.Name) {
+          parameter.Name = parameter.Name.replace(path, '')
           parameters.push(
             (({Name, Value}) => ({
               Name,
