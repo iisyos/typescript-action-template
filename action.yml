@@ -2,10 +2,18 @@ name: 'Your name here'
 description: 'Provide a description here'
 author: 'Your name or organization here'
 inputs:
-  milliseconds: # change this
+  path:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'the path to your SSM ParameterStore'
+  email:
+    required: true
+    description: 'Heroku email'
+  token:
+    required: true
+    description: 'Heroku token'
+  app:
+    required: true
+    description: 'Heroku app name'
 runs:
   using: 'node16'
   main: 'dist/index.js'
